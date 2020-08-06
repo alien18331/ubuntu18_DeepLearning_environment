@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)https://www.cnblogs.com/booturbo/p/11834661.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="origin">
+    <meta property="og:description" content="转载请注明出处 BooTurbo https://www.cnblogs.com/booturbo/p/11834661.html 安装平台及环境 CPU：i9-9900k桌面级 GPU：RTX 20">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园</title>
+    <link id="favicon" rel="shortcut icon" href="https://common.cnblogs.com/favicon.ico?v=20200522" type="image/x-icon">
+    
+    <link rel="stylesheet" href="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/blog-common.min.css">
+    <link id="MainCss" rel="stylesheet" href="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/bundle-summergarden.min.css">
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/bundle-summergarden-mobile.min.css">
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/booturbo/rss">
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/booturbo/rsd.xml">
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/booturbo/wlwmanifest.xml">
+    <script src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/osd.js"></script><script async="" src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/analytics.js"></script><script type="text/javascript" src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/encoder.js"></script><script>
+        var currentBlogId = 487723;
+        var currentBlogApp = 'booturbo';
+        var cb_enable_mathjax = true;
+        var isLogined = false;
+        var isBlogOwner = false;
+        var skinName = 'summerGarden';
+        var visitorUserId = '';
+    </script>
+        <script>
+            var currentPostDateAdded = '2019-11-11 07:45';
+        </script>
+    <script src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/jquery-2.2.0.min.js"></script>
+    <script src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/blog-common.min.js"></script>
+    <script type="text/x-mathjax-config;executed=true">
+        MathJax.Hub.Config({
+        tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']], processClass: 'math', processEscapes: true },
+        TeX: {
+        equationNumbers: { autoNumber: ['AMS'], useLabelIds: true },
+        extensions: ['extpfeil.js', 'mediawiki-texvc.js'],
+        Macros: {bm: "\\boldsymbol"}
+        },
+        'HTML-CSS': { linebreaks: { automatic: true } },
+        SVG: { linebreaks: { automatic: true } }
+        });
+    </script>
+    <script src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/MathJax.js"></script>
+    
+<link rel="preload" href="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/f(4).txt" as="script"><script type="text/javascript" src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/f(4).txt"></script><link rel="preload" href="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/f(5).txt" as="script"><script type="text/javascript" src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/f(5).txt"></script><script src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/pubads_impl_2020073001.js" async=""></script><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 5px 0px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px; -khtml-border-radius: 5px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 1px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: .7em}
+.MathJax_MenuRadioCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuLabel {padding: 1px 2em 3px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #DDDDDD; margin: 4px 3px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: #606872; color: white}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover, .MJXp-munder {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > *, .MJXp-munder > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style><link rel="prefetch" href="https://bfb271c3043e1afb299e5bfd8c5085a5.safeframe.googlesyndication.com/safeframe/1-0-37/html/container.html"><link rel="prefetch" href="https://tpc.googlesyndication.com/safeframe/1-0-37/html/container.html"></head>
+<body><div id="MathJax_Message" style="display: none;"></div>
+    <a name="top"></a>
+    
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a href="https://www.cnblogs.com/booturbo/"><img id="blogLogo" src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/booturbo/">BooTurbo</a>
+</h1>
+<h2>
+
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+
+			<ul id="navList">
+				<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+				<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/booturbo/">
+首页</a>
+</li>
+				<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+				<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/BooTurbo">
+联系</a></li>
+				<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+				<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/booturbo/rss/">
+订阅</a>
+				
+<a id="blog_nav_rss_image" href="https://www.cnblogs.com/booturbo/rss/">
+    <img src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/xml.gif" alt="订阅">
+</a></li>
+			</ul>
+
+
+
+		<div class="blogStats">
+			
+			<!--done-->
+随笔 - 
+44&nbsp;
+文章 - 
+0&nbsp;
+评论 - 
+6&nbsp;
+
+
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			
+<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/booturbo/p/11834661.html">
+    <span>Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3</span>
+    
+
+
+</a>
+
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			
+<div id="cnblogs_post_body" class="blogpost-body">
+    <p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span style="font-size: 18px;">转载请注明出处&nbsp; BooTurbo <a style="cursor: pointer;" onclick="window.open(&#39;https://www.cnblogs.com/booturbo/p/11834661.html&#39;,&#39;&#39;,&#39;&#39;);return false;" href="https://www.cnblogs.com/booturbo/p/11834661.html">https://www.cnblogs.com/booturbo/p/11834661.html</a></span></p>
+<p>&nbsp;</p>
+<p><strong><span style="font-size: 18px;">安装平台及环境</span></strong></p>
+<p><span style="font-size: 18px;">CPU：i9-9900k桌面级</span></p>
+<p><span style="font-size: 18px;">GPU：RTX 2080移动版</span></p>
+<p><span style="font-size: 18px;">系统：Ubuntu 18.04.3 LTS</span></p>
+<p><span style="font-size: 18px;">1、在安装CUDA之前确保环境满足安装条件</span></p>
+<p><span style="font-size: 18px;">2、进入NVIDIA官网下载适合自己机器的CUDA版本，<a style="cursor: pointer;" title="官网下载" onclick="window.open(&#39;https://developer.nvidia.com/cuda-toolkit-archive?spm=a2c4e.10696291.0.0.7b5819a4F6rq7s&#39;,&#39;&#39;,&#39;&#39;);return false;" href="https://developer.nvidia.com/cuda-toolkit-archive?spm=a2c4e.10696291.0.0.7b5819a4F6rq7s"><span style="cursor: pointer;">官网下载</span></a><span style="cursor: pointer;"><span style="cursor: pointer;">，如图所示，按照 Installation Instructions 来进行，</span></span></span></p>
+<p>&nbsp;</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="font-size: 14pt;"><span style="color: #0000ff;">wget</span> <span style="color: #008000;">https:</span><span style="color: #008000;">//</span><span style="color: #008000;">developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-ubuntu1804.pin</span>
+
+<span style="color: #0000ff;">sudo</span> <span style="color: #0000ff;">mv</span> cuda-ubuntu1804.pin /etc/apt/preferences.d/cuda-repository-pin-600
+
+<span style="color: #0000ff;">wget</span> <span style="color: #008000;">http:</span><span style="color: #008000;">//</span><span style="color: #008000;">developer.download.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda-repo-ubuntu1804-10-1-local-10.1.243-418.87.00_1.0-1_amd64.deb</span>
+
+<span style="color: #0000ff;">sudo</span> <span style="color: #000000;">dpkg -i cuda-repo-ubuntu1804-10-1-local-10.1.243-418.87.00_1.0-1_amd64.deb
+
+</span><span style="color: #0000ff;">sudo</span> <span style="color: #000000;">apt-key add /var/cuda-repo-10-1-local-10.1.243-418.87.00/7fa2af80.pub
+
+</span><span style="color: #0000ff;">sudo</span> <span style="color: #000000;">apt-get update<br><br><span style="color: #0000ff;">sudo</span> apt-get -y install cuda</span></span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p><span style="font-size: 18px;"><span style="cursor: pointer;"><span style="cursor: pointer;"><img src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/1585117-20191111101307549-1660383844.png" alt=""></span></span></span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: 16px;"><img src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/1585117-20191111102317917-1464934472.png" alt=""></span></p>
+<p><span style="font-size: 18px;">3、安装完成后，添加环境变量，打开 bashrc 文件，</span></p>
+<p><span style="font-size: 18px;">命令行输入：&nbsp;<span style="color: #0000ff;">sudo</span> gedit ~/.bashrc ，然后在文件最后添加下面3行，保存</span></p>
+<p>&nbsp;</p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 18px;"><span style="color: #0000ff;">export</span> CUDA_HOME=/usr/local/<span style="color: #000000;">cuda
+
+<span style="color: #0000ff;">export</span> PATH</span>=$PATH:$CUDA_HOME/<span style="color: #000000;">bin
+
+<span style="color: #0000ff;">export</span> LD_LIBRARY_PATH</span>=/usr/local/cuda-<span style="color: #000000;">10.1</span>/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}</span> </pre>
+</div>
+<p>&nbsp;</p>
+<p><span style="font-size: 16px;"><img src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/1585117-20191111104850204-72975851.png" alt=""></span></p>
+<p><span style="font-size: 18px;">&nbsp; </span></p>
+<p><span style="font-size: 18px;">然后刷新下环境变量，<br></span></p>
+<p><span style="font-size: 18px;">输入：<strong><span style="color: #0000ff;">source</span></strong> ~/.bashrc </span></p>
+<p><span style="font-size: 18px;">4、测试下CUDA是否安装成功，</span></p>
+<p><span style="font-size: 18px;">方法1：输入 <strong><span style="color: #0000ff;">nvcc</span></strong> -V</span><span style="font-size: 18px;"> ，显示如下，说明没问题</span></p>
+<p><span style="font-size: 16px;"><img src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/1585117-20191111104633098-2058118465.png" alt=""></span></p>
+<p><span style="font-size: 18px;">方法2：输入如下，显示如图说明安装成功</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 14pt;"><strong><span style="color: #0000ff;">cd</span></strong> /usr/local/cuda/samples/1_Utilities/<span style="color: #000000;">deviceQuery
+</span><strong><span style="color: #0000ff;">sudo</span> </strong><span style="color: #000000;">make</span><strong><span style="color: #0000ff;">
+./deviceQuery</span></strong></span></pre>
+</div>
+<p>&nbsp;</p>
+<p><span style="font-size: 16px;"><img src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/1585117-20191111110057169-2068921376.png" alt=""></span></p>
+<p><span style="font-size: 16px;"><img src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/1585117-20191111110109300-551046699.png" alt=""></span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: 18px;">5、安装cuDNN 7.6.5版本，转到<a style="cursor: pointer;" title="官网下载" onclick="window.open(&#39;https://developer.nvidia.com/rdp/cudnn-download?spm=a2c4e.10696291.0.0.1df819a4HJWSTe&#39;,&#39;&#39;,&#39;&#39;);return false;" href="https://developer.nvidia.com/rdp/cudnn-download?spm=a2c4e.10696291.0.0.1df819a4HJWSTe">官网下载</a>，下载前先注册一下，填个调查问卷，根据自己的环境和架构选择包，下载到本地</span></p>
+<p><span style="font-size: 16px;"><img src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/1585117-20191111123807202-1429904716.png" alt=""></span></p>
+<p><span style="font-size: 18px;">切换到下载目录 <strong><span style="color: #0000ff;">cd</span></strong> Downloads ，然后按照以下操作进行，</span></p>
+<p><span style="font-size: 16px;"><span style="font-size: 18px;">解压 cuDNN Library for Linux，输入：&nbsp;&nbsp;<span class="cnblogs_code" style="font-size: 14pt;"><span style="color: #0000ff;"><strong>tar -zxvf</strong></span> <span style="color: #000000;">cudnn-10.1-linux-x64-v7.6.5.32.tgz</span></span>&nbsp;</span></span></p>
+<p><span style="font-size: 16px;"><span style="font-size: 18px;">将解压出来的文件复制到安装的CUDA环境中，输入：&nbsp;<span class="cnblogs_code" style="font-size: 14pt;"><span style="color: #0000ff;"><strong>sudo cp</strong></span> cuda/include/cudnn.h /usr/local/cuda/inlude</span>&nbsp;</span></span></p>
+<p><span style="font-size: 16px;"><span style="color: #0000ff;"><span style="color: #000000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; </span><span class="cnblogs_code" style="font-size: 14pt;"><span style="color: #0000ff;"><strong>sudo</strong></span> <strong><span style="color: #0000ff;">cp</span></strong> <span style="color: #000000;">cuda/lib64/libcudnn* /usr/local/cuda/lib64</span> </span><span style="color: #0000ff;">&nbsp;<br></span></span></p>
+<p><span style="font-size: 16px;"><span style="font-size: 18px;">更改权限，输入：&nbsp;<span class="cnblogs_code" style="font-size: 14pt;"><strong><span style="color: #0000ff;">sudo</span> <span style="color: #0000ff;">chmod</span> <span style="color: #0000ff;">a+r</span></strong> /usr/local/cuda/include/cudnn.h /usr/local/cuda/lib64/libcudnn* </span>&nbsp;</span></span></p>
+<p><span style="font-size: 18px;">安装 Deb 包，cuDNN Runtime Library for Ubuntu18.04(Deb)，cuDNN Developer Library for Ubuntu18.04(Deb)，cuDNN Code Samples and User Guide for Ubuntu18.04(Deb)</span></p>
+<p><span style="font-size: 16px;"><span style="font-size: 16px;">分别输入： &nbsp;</span> <span class="cnblogs_code" style="font-size: 14pt;"><strong><span style="color: #0000ff;">sudo</span> <span style="color: #0000ff;">dpkg -i</span></strong> <span style="color: #000000;">libcudnn7_7.6.5.32-1+cuda10.1_amd64.deb</span></span>&nbsp;</span></p>
+<p><span style="font-size: 16px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; <span class="cnblogs_code" style="font-size: 14pt;"><strong><span style="color: #0000ff;">sudo</span> <span style="color: #0000ff;">dpkg -i</span> </strong><span style="color: #000000;">libcudnn7-dev_7.6.5.32-1+cuda10.1_amd64.deb </span></span>&nbsp;</span></p>
+<p><span style="font-size: 16px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="cnblogs_code" style="font-size: 14pt;"><strong><span style="color: #0000ff;">sudo</span></strong> <span style="color: #0000ff;"><strong>dpkg -i</strong></span> <span style="color: #000000;">libcudnn7-doc_7.6.5.32-1+cuda10.1_amd64.deb</span> </span>&nbsp;</span></p>
+<p><span style="font-size: 18px;">安装结束后，重启系统，再测试一下安装是否成功，</span></p>
+<p><span style="font-size: 16px;"><span style="font-size: 16px;">方法1，输入：&nbsp;<span class="cnblogs_code" style="font-size: 14pt;"><strong><span style="color: #0000ff;">cp</span></strong> <span style="color: #0000ff;"><strong>-r</strong></span> /usr/src/cudnn_samples_v7/ ~</span>&nbsp;</span></span></p>
+<p><span style="font-size: 16px;"><span style="font-size: 16px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="cnblogs_code" style="font-size: 14pt;"><strong><span style="color: #0000ff;">cd</span></strong> ~/cudnn_samples_v7/mnistCUDNN</span>&nbsp;</span></span></p>
+<p><span style="font-size: 16px;"><span style="font-size: 16px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="cnblogs_code" style="font-size: 14pt;"><strong><span style="color: #0000ff;">make</span></strong> <span style="color: #000000;">clean &amp;&amp; make</span></span>&nbsp;</span></span></p>
+<p><span style="font-size: 16px;"><span style="font-size: 16px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong><span class="cnblogs_code" style="font-size: 14pt; color: #0000ff;">./mnistCUDNN</span></strong>&nbsp;</span></span></p>
+<p>&nbsp;</p>
+<p><img src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/1585117-20191111140553030-1221845967.png" alt=""></p>
+<p><img src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/1585117-20191111140642991-783440879.png" alt=""></p>
+<p><img src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/1585117-20191111140811958-505170999.png" alt=""></p>
+<p><span style="font-size: 18px;">出现Test passed！没有报错即安装成功</span></p>
+<p><span style="font-size: 16px;"><span style="font-size: 16px;">方法2，输入：&nbsp;<span class="cnblogs_code" style="font-size: 14pt;"><strong><span style="color: #0000ff;">cd</span></strong> /usr/local/cuda/samples/1_Utilities/deviceQuery</span>&nbsp;</span></span></p>
+<p><span style="font-size: 16px;"><span style="font-size: 16px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="cnblogs_code" style="font-size: 14pt;"><strong><span style="color: #0000ff;">sudo</span></strong> <span style="color: #000000;">make</span></span>&nbsp;</span></span></p>
+<p><span style="font-size: 16px;"><span style="font-size: 16px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<strong><span class="cnblogs_code" style="font-size: 14pt; color: #0000ff;">./deviceQuery</span> </strong></span></span></p>
+<p><img src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/1585117-20191111141949508-789496593.png" alt=""></p>
+<p><img src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/1585117-20191111142002339-1894458334.png" alt=""></p>
+<p><span style="font-size: 18px;">出现PASS结果，说明安装成功。</span></p>
+<p><span style="font-size: 18px;">&nbsp;6、安装PyTorch1.3</span></p>
+<p><span style="font-size: 18px;">进入PyTorch官网安装合适的版本，<a style="cursor: pointer;" title="官网" onclick="window.open(&#39;https://pytorch.org/&#39;,&#39;&#39;,&#39;&#39;);return false;" href="https://pytorch.org/">官网&nbsp;</a><span style="cursor: pointer;">，</span></span></p>
+<p><span style="font-size: 18px;"><span style="cursor: pointer;">输入：&nbsp;<span class="cnblogs_code" style="font-size: 14pt;"><span style="color: #0000ff;"><strong>pip3</strong></span> <span style="color: #000000;">install</span> torch torchvision</span> ，等待安装结束</span></span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: 18px;"><span style="cursor: pointer;"><img src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/1585117-20191112092700262-318991109.png" alt=""></span></span></p>
+<p><span style="font-size: 18px;"><img src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/1585117-20191112092023413-1340168004.png" alt=""></span></p>
+<p>&nbsp;<span style="font-size: 18px;">安装完成后，进入python3环境，验证是否成功，</span></p>
+<p><span style="font-size: 18px;">输入： python3，</span></p>
+<p><span style="font-size: 18px;">再输入： <strong><span style="color: #0000ff;">import</span></strong> torch</span></p>
+<p><span style="font-size: 18px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><span style="color: #0000ff;"> import</span></strong> torchvision</span></p>
+<p><span style="font-size: 18px;"><img src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/1585117-20191112093611581-1188649008.png" alt=""></span></p>
+<p>&nbsp;<span style="font-size: 18px;">没有报错，说明安装成功。</span></p>
+<p><span style="font-size: 18px;">最后验证下GPU能否使用，输入：&nbsp;<span class="cnblogs_code" style="font-size: 14pt;">print(torch.cuda.is_available())</span> ，输出True，说明没问题。</span></p>
+<p><span style="font-size: 18px;"><img src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/1585117-20191112094442625-737983084.png" alt=""></span></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span style="font-size: 18px;">Enjoy it.</span></p>
+<p>&nbsp;</p>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="EntryTag">
+    标签: 
+            <a href="https://www.cnblogs.com/booturbo/tag/cuDNN/">cuDNN</a>,             <a href="https://www.cnblogs.com/booturbo/tag/CUDA/">CUDA</a>,             <a href="https://www.cnblogs.com/booturbo/tag/Ubuntu18.04/">Ubuntu18.04</a></div>
+
+    <div id="blog_post_info">
+<div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(11834661,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+        <a id="green_channel_follow" onclick="follow(&#39;e33997ec-8c3f-4004-544d-08d6775136df&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/booturbo/" target="_blank"><img src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/20190111144351.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/booturbo/">BooTurbo</a><br>
+            <a href="https://home.cnblogs.com/u/booturbo/followees/">关注 - 0</a><br>
+            <a href="https://home.cnblogs.com/u/booturbo/followers/">粉丝 - 1</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;e33997ec-8c3f-4004-544d-08d6775136df&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(11834661,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">2</span>
+    </div>
+    <div class="buryit" onclick="votePost(11834661,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+    <div class="clear"></div>
+    <div id="post_next_prev">
+
+    <a href="https://www.cnblogs.com/booturbo/p/11809410.html" class="p_n_p_prefix">« </a> 上一篇：    <a href="https://www.cnblogs.com/booturbo/p/11809410.html" title="发布于 2019-11-06 23:25">Ubuntu 18.04通过命令禁用/开启触控板</a>
+    <br>
+    <a href="https://www.cnblogs.com/booturbo/p/11837948.html" class="p_n_p_prefix">» </a> 下一篇：    <a href="https://www.cnblogs.com/booturbo/p/11837948.html" title="发布于 2019-11-12 10:27">使用博客园写随笔时如何添加超链接</a>
+
+</div>
+</div>
+		</div>
+		<div class="postDesc">posted @ 
+<span id="post-date">2019-11-11 19:45</span>&nbsp;
+<a href="https://www.cnblogs.com/booturbo/">BooTurbo</a>&nbsp;
+阅读(<span id="post_view_count">5338</span>)&nbsp;
+评论(<span id="post_comment_count">1</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=11834661" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(11834661);return false;">收藏</a></div>
+	</div>
+	
+	
+</div>
+<script src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 487723, cb_blogApp = 'booturbo', cb_blogUserGuid = 'e33997ec-8c3f-4004-544d-08d6775136df';
+    var cb_entryId = 11834661, cb_entryCreatedDate = '2019-11-11 19:45', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+    loadSideColumnAd();
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder">
+
+<div id="comment_pager_top">
+    
+</div>
+
+<!--done-->
+<br>
+<div class="feedback_area_title">
+    Post Comment</div>
+<div class="feedbackNoItems">
+    <div class="feedbackNoItems"></div></div>
+        <div class="feedbackItem">
+            <div class="feedbackListSubtitle">
+                <div class="feedbackManage">
+                    
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+                </div>
+                
+<a href="https://www.cnblogs.com/booturbo/p/11834661.html#4429689" class="layer">#1楼</a>
+<a name="4429689" id="comment_anchor_4429689"></a>
+
+        <span id="comment-maxId" style="display:none">4429689</span>
+        <span id="comment-maxDate" style="display:none">11/18/2019 2:09:56 PM</span>
+
+<span class="comment_date">2019-11-18 14:09</span>
+
+
+                |
+                
+
+            <a id="a_comment_author_4429689" href="https://www.cnblogs.com/swordspoet/" target="_blank">swordspoet</a>
+
+            </div>
+            <div class="feedbackCon">
+                
+<div id="comment_body_4429689" data-format-type="Ubb" class="blog_comment_body cnblogs-ubb">
+    我是最新版本的Ubuntu 18.04，昨天尝试安装cuda10.0出错了，我想应该是当前Ubuntu的内核版本已经不适应cuda10.0了，今天回去安装cuda10.1试试看！
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4429689, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(4429689, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        <span id="comment_4429689_avatar" style="display:none">
+            https://pic.cnblogs.com/face/980296/20160619150535.png
+        </span>
+<br>
+            </div>
+        </div>
+
+<div id="comment_pager_bottom">
+    
+</div>
+
+
+</div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/booturbo/p/11834661.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/booturbo/p/11834661.html#top">返回顶部</a></div>
+    <div id="comment_form_container" style="visibility: visible;"><div class="login_tips">
+    注册用户登录后才能发表评论，请 
+    <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a>
+     或 
+    <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，
+    <a href="https://www.cnblogs.com/">访问</a> 网站首页。
+</div></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-ucancode&#39;)">【推荐】超50万行VC++源码: 大型组态工控、电力仿真CAD与GIS源码库</a><br><a href="https://brands.cnblogs.com/huawei" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-华为专区&#39;)">【推荐】了不起的开发者，挡不住的华为，园子里的品牌专区</a><br><a href="https://developer.aliyun.com/article/769509?utm_content=g_1000163114" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-阿里云&#39;)">【推荐】《Java开发手册》测试题大闯关，看看你能走到哪一步</a><br><a href="https://developer.aliyun.com/article/740731?utm_content=g_1000104143https://developer.aliyun.com/article/740731?utm_content=g_1000104143" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-阿里云开发者社区&#39;)">【推荐】2019 Flink Forward 大会最全视频来了！5大专题不容错过</a><br></div>
+    <div id="opt_under_post"></div>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1592365906576-0" style="width: 300px; height: 250px;" data-google-query-id="CLKbxcW7hesCFUl-KgodCWcCjg"><div id="google_ads_iframe_/1090369/C1_0__container__" style="border: 0pt none; display: inline-block; width: 300px; height: 250px;"><iframe frameborder="0" src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/container.html" id="google_ads_iframe_/1090369/C1_0" title="3rd party ad content" name="" scrolling="no" marginwidth="0" marginheight="0" width="300" height="250" data-is-safeframe="true" sandbox="allow-forms allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" data-google-container-id="1" style="border: 0px; vertical-align: bottom;" data-load-complete="true"></iframe></div></div>
+    </div>
+    <div id="under_post_news"><div class="recomm-block"><b>相关博文：</b><br>·  <a title="ubuntu18.04安装pytorch、cuda、cudnn等" href="https://www.cnblogs.com/zhengbiqing/p/10346212.html" target="_blank" onclick="clickRecomItmem(10346212)">ubuntu18.04安装pytorch、cuda、cudnn等</a><br>·  <a title="TensorFlow安装(Ubuntu18.04+Anaconda3+CUDA9.0+cuDNN7.1+TensorFlow1.8.0+Pycharm)" href="https://www.cnblogs.com/lydbky/p/9348112.html" target="_blank" onclick="clickRecomItmem(9348112)">TensorFlow安装(Ubuntu18.04+Anaconda3+CUDA9.0+cuDNN7.1+TensorFlow1.8.0+Pycharm)</a><br>·  <a title="ubuntu安装CUDA、cuDNN的tips" href="https://www.cnblogs.com/billwong/p/10884099.html" target="_blank" onclick="clickRecomItmem(10884099)">ubuntu安装CUDA、cuDNN的tips</a><br>·  <a title="Ubuntu18.04安装Cuda10.1" href="https://www.cnblogs.com/zmbreathing/p/CUDA.html" target="_blank" onclick="clickRecomItmem(11158970)">Ubuntu18.04安装Cuda10.1</a><br>·  <a title="ubuntu安装cuda、cudnn" href="https://www.cnblogs.com/lucifer1997/p/10512946.html" target="_blank" onclick="clickRecomItmem(10512946)">ubuntu安装cuda、cudnn</a><br>»  <a target="_blank" href="https://recomm.cnblogs.com/blogpost/11834661">更多推荐...</a></div></div>
+    <div id="cnblogs_c2" class="c_ad_block" style="display: none;">
+        <div id="div-gpt-ad-1592366332455-0" style="width: 468px; height: 60px;" data-google-query-id="CM6mxMW7hesCFUl-KgodCWcCjg"><div id="google_ads_iframe_/1090369/C2_0__container__" style="border: 0pt none; width: 468px; height: 60px;"></div></div>
+    </div>
+    <div id="under_post_kb">
+<div class="itnews c_ad_block">
+    <b>最新 IT 新闻</b>:
+    <br>
+ ·              <a href="https://news.cnblogs.com/n/668703/" target="_blank">为救TikTok 美国年轻人一直在“战斗”</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/668674/" target="_blank">国家最高科学技术奖获得者刘永坦将800万元奖金全部捐给哈工大</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/668790/" target="_blank">"菜鸟直送"品牌浮出水面，阿里在同城物流再落一子</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/668789/" target="_blank">微软拟最多以300亿美元收购TikTok，并转移软件相关代码</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/668788/" target="_blank">不想输给"后浪" 斗鱼虎牙要合并？腾讯或成大赢家</a>
+            <br>
+    » <a href="https://www.cnblogs.com/news/" title="IT 新闻" target="_blank">更多新闻...</a>
+</div></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverT2();
+        deliverC1C2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div></div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem"><!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	
+<div id="blog-news">
+    
+    <div id="profile_block">
+        昵称：
+        <a href="https://home.cnblogs.com/u/booturbo/">
+            BooTurbo
+        </a>
+        <br>
+        园龄：
+        <a href="https://home.cnblogs.com/u/booturbo/" title="入园时间：2019-01-11">
+            1年6个月
+        </a>
+        <br>
+        粉丝：
+        <a href="https://home.cnblogs.com/u/booturbo/followers/">
+            1
+        </a>
+        <br>
+        关注：
+        <a href="https://home.cnblogs.com/u/booturbo/followees/">
+            0
+        </a>
+        <div id="p_b_follow">
+<a href="javascript:void(0)" onclick="follow(&#39;e33997ec-8c3f-4004-544d-08d6775136df&#39;)">+加关注</a></div>
+        <script>getFollowStatus('e33997ec-8c3f-4004-544d-08d6775136df');</script>
+    </div>
+</div>
+</div>
+
+</div>
+
+<div id="sidebar_ad"></div>
+			<div id="calendar"><div id="calendar"><div id="blog-calendar" style="">
+
+<table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar" border="0">
+    <tbody>
+        <tr>
+            <td colspan="7">
+                <table class="CalTitle" cellspacing="0" border="0">
+                    <tbody>
+                        <tr>
+                            <td class="CalNextPrev">
+                                <a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2020/07/06&#39;); return false;">&lt;</a>
+                            </td>
+                            <td align="center">2020年8月</td>
+                            <td align="right" class="CalNextPrev">
+                                <a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2020/09/06&#39;); return false;">&gt;</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    <tr>
+        <th class="CalDayHeader" align="center" abbr="日" scope="col">日</th>
+        <th class="CalDayHeader" align="center" abbr="一" scope="col">一</th>
+        <th class="CalDayHeader" align="center" abbr="二" scope="col">二</th>
+        <th class="CalDayHeader" align="center" abbr="三" scope="col">三</th>
+        <th class="CalDayHeader" align="center" abbr="四" scope="col">四</th>
+        <th class="CalDayHeader" align="center" abbr="五" scope="col">五</th>
+        <th class="CalDayHeader" align="center" abbr="六" scope="col">六</th>
+    </tr>
+            <tr>
+                            <td class="CalOtherMonthDay" align="center">26</td>
+                            <td class="CalOtherMonthDay" align="center">27</td>
+                            <td class="CalOtherMonthDay" align="center">28</td>
+                            <td class="CalOtherMonthDay" align="center">29</td>
+                            <td class="CalOtherMonthDay" align="center">30</td>
+                            <td class="CalOtherMonthDay" align="center">31</td>
+                    <td class="CalWeekendDay" align="center">
+                        1
+                    </td>
+            </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            2
+                        </td>
+                            <td class="" align="center">
+                                3
+                            </td>
+                            <td class="" align="center">
+                                4
+                            </td>
+                            <td class="" align="center">
+                                5
+                            </td>
+                            <td class="CalTodayDay" align="center">
+                                6
+                            </td>
+                            <td class="" align="center">
+                                7
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            8
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            9
+                        </td>
+                            <td class="" align="center">
+                                10
+                            </td>
+                            <td class="" align="center">
+                                11
+                            </td>
+                            <td class="" align="center">
+                                12
+                            </td>
+                            <td class="" align="center">
+                                13
+                            </td>
+                            <td class="" align="center">
+                                14
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            15
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            16
+                        </td>
+                            <td class="" align="center">
+                                17
+                            </td>
+                            <td class="" align="center">
+                                18
+                            </td>
+                            <td class="" align="center">
+                                19
+                            </td>
+                            <td class="" align="center">
+                                20
+                            </td>
+                            <td class="" align="center">
+                                21
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            22
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            23
+                        </td>
+                            <td class="" align="center">
+                                24
+                            </td>
+                            <td class="" align="center">
+                                25
+                            </td>
+                            <td class="" align="center">
+                                26
+                            </td>
+                            <td class="" align="center">
+                                27
+                            </td>
+                            <td class="" align="center">
+                                28
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            29
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            30
+                        </td>
+                            <td class="" align="center">
+                                31
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                1
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                2
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                3
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                4
+                            </td>
+                        <td class="CalOtherMonthDay" align="center">
+                            5
+                        </td>
+                </tr>
+    </tbody>
+</table></div></div>                
+                    <script>loadBlogDefaultCalendar();</script></div>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn">
+<!-- 搜索 -->
+<div id="sidebar_search" class="sidebar-block">
+    <div id="sidebar_search" class="mySearch">
+        <h3 class="catListTitle">搜索</h3>
+        <div id="sidebar_search_box">
+            <div id="widget_my_zzk" class="div_my_zzk">
+                <input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk">
+            </div>
+            <div id="widget_my_google" class="div_my_zzk">
+                <input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 常用链接 -->
+<div id="sidebar_shortcut" class="sidebar-block">
+    
+
+</div>
+
+<!-- 最新随笔 -->
+
+
+
+<!-- 我的标签 -->
+<div id="sidebar_toptags" class="sidebar-block">
+    <div class="catListTag">
+<h3 class="catListTitle">My Tags</h3>
+<ul>
+
+        <li>
+            <a href="https://www.cnblogs.com/booturbo/tag/Ubuntu%2016.04/">Ubuntu 16.04</a>(12)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/booturbo/tag/Ubuntu18.04/">Ubuntu18.04</a>(11)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/booturbo/tag/Win%2010/">Win 10</a>(6)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/booturbo/tag/SciPy/">SciPy</a>(2)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/booturbo/tag/Anaconda/">Anaconda</a>(2)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/booturbo/tag/%E6%A0%91%E8%8E%93%E6%B4%BE/">树莓派</a>(2)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/booturbo/tag/%E5%9B%BE%E5%83%8F%E9%A2%84%E5%A4%84%E7%90%86/">图像预处理</a>(2)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/booturbo/tag/Ubuntu/">Ubuntu</a>(2)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/booturbo/tag/%E6%A0%A1%E5%9B%AD%E7%BD%91%E5%AE%A2%E6%88%B7%E7%AB%AF/">校园网客户端</a>(1)
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/booturbo/tag/%E6%99%BA%E8%83%BD%E5%B0%8F%E8%BD%A6/">智能小车</a>(1)
+        </li>
+    <li>
+        <a href="https://www.cnblogs.com/booturbo/tag/">更多</a>
+    </li>
+
+</ul>
+</div>
+
+
+</div>
+
+<!-- 积分与排名 -->
+
+
+<!-- 随笔分类、随笔档案、文章分类、新闻分类、相册、链接 -->
+<div id="sidebar_categories">
+    
+<div class="catListPostArchive">
+<h3 class="catListTitle">
+
+随笔档案
+
+
+</h3>
+
+
+<ul>
+
+<li>
+<a href="https://www.cnblogs.com/booturbo/archive/2020/04.html" rel="" target="">
+    2020年4月(5)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/booturbo/archive/2020/02.html" rel="" target="">
+    2020年2月(1)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/booturbo/archive/2019/12.html" rel="" target="">
+    2019年12月(2)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/booturbo/archive/2019/11.html" rel="" target="">
+    2019年11月(11)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/booturbo/archive/2019/10.html" rel="" target="">
+    2019年10月(3)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/booturbo/archive/2019/08.html" rel="" target="">
+    2019年8月(1)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/booturbo/archive/2019/07.html" rel="" target="">
+    2019年7月(3)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/booturbo/archive/2019/05.html" rel="" target="">
+    2019年5月(1)
+</a>
+ 
+</li>
+<li>
+<a href="https://www.cnblogs.com/booturbo/archive/2019/01.html" rel="" target="">
+    2019年1月(17)
+</a>
+ 
+</li>
+
+</ul>
+
+
+</div>
+
+
+</div>
+
+<!-- 最新评论 -->
+<div id="sidebar_recentcomments" class="sidebar-block">
+    <div class="catListComment">
+<h3 class="catListTitle">Recent Comments</h3>
+
+	<div class="RecentCommentBlock">
+        <ul>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/booturbo/p/10265039.html">1. Re:固态+机械双硬盘分别安装Win10和Ubuntu16.04双系统</a></li>
+                    <li class="recent_comment_body">@ toukairin可以在重装过程中，格式化安装Ubuntu的盘，但是这样会导致在开机的时候引导错误，虽然可以继续使用Windows，但是再重装Ubuntu就不能用Ubuntu了，需要修复引导才行。...</li>
+                    <li class="recent_comment_author">--BooTurbo</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/booturbo/p/10265039.html">2. Re:固态+机械双硬盘分别安装Win10和Ubuntu16.04双系统</a></li>
+                    <li class="recent_comment_body">请问，您知道怎么删掉Ubuntu吗？</li>
+                    <li class="recent_comment_author">--toukairin</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/booturbo/p/11834661.html">3. Re:Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3</a></li>
+                    <li class="recent_comment_body">我是最新版本的Ubuntu 18.04，昨天尝试安装cuda10.0出错了，我想应该是当前Ubuntu的内核版本已经不适应cuda10.0了，今天回去安装cuda10.1试试看！</li>
+                    <li class="recent_comment_author">--swordspoet</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/booturbo/p/10265039.html">4. Re:固态+机械双硬盘分别安装Win10和Ubuntu16.04双系统</a></li>
+                    <li class="recent_comment_body">@ 牧码人_hh你好，不好意思，才回复，/boot / swap /home 四个目录直接在ssd里给足空间，分配就好。...</li>
+                    <li class="recent_comment_author">--BooTurbo</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/booturbo/p/10265039.html">5. Re:固态+机械双硬盘分别安装Win10和Ubuntu16.04双系统</a></li>
+                    <li class="recent_comment_body">博主你好！/boot  分区怎么放到ssd上呀</li>
+                    <li class="recent_comment_author">--牧码人_hh</li>
+        </ul>
+    </div>
+</div>
+
+
+</div>
+
+
+
+<!-- 阅读排行榜 -->
+<div id="sidebar_topviewedposts" class="sidebar-block">
+    <div class="catListView">
+<h3 class="catListTitle">Top Posts</h3>
+	<div id="TopViewPostsBlock">
+        <ul style="word-break:break-all">
+                    <li>
+                        <a href="https://www.cnblogs.com/booturbo/p/11261656.html">
+                            1. 安装系统时出现 Windows无法打开所需的文件 C:\Sources\install.wim  的解决办法(17511)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/booturbo/p/10263271.html">
+                            2. Win10系统修改主机名、用户名称和密码、以及C盘中的用户文件夹名(8670)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/booturbo/p/11834661.html">
+                            3. Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3(5338)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/booturbo/p/10265039.html">
+                            4. 固态+机械双硬盘分别安装Win10和Ubuntu16.04双系统(4933)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/booturbo/p/10274758.html">
+                            5. Linux/Ubuntu 16.04 好用的视频播放器 SMPlayer(2541)
+                        </a>
+                    </li>
+        </ul>
+    </div>
+</div>
+
+
+</div>
+
+<!-- 评论排行榜 -->
+<div id="sidebar_topcommentedposts" class="sidebar-block">
+    <!--
+<div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock">
+        <ul style="word-break:break-all">
+                    <li>
+                        <a href="https://www.cnblogs.com/booturbo/p/10265039.html">
+                            1. 固态+机械双硬盘分别安装Win10和Ubuntu16.04双系统(4)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/booturbo/p/11834661.html">
+                            2. Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3(1)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/booturbo/p/10263271.html">
+                            3. Win10系统修改主机名、用户名称和密码、以及C盘中的用户文件夹名(1)
+                        </a>
+                    </li>
+        </ul>
+    </div>
+</div>
+-->
+
+
+</div>
+
+<!-- 推荐排行榜 -->
+<div id="sidebar_topdiggedposts" class="sidebar-block">
+    
+<div id="topdigg_posts_wrap">
+    <div class="catListView">
+        <h3 class="catListTitle">推荐排行榜</h3>
+        <div id="TopDiggPostsBlock">
+            <ul style="word-break: break-all">
+                        <li>
+                            <a href="https://www.cnblogs.com/booturbo/p/11834661.html">
+                                1. Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3(2)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/booturbo/p/11837948.html">
+                                2. 使用博客园写随笔时如何添加超链接(1)
+                            </a>
+                        </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</div></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright © 2020 BooTurbo
+<br><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+
+
+<iframe id="google_osd_static_frame_9215821847887" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;" src="./Ubuntu 18.04安装 CUDA 10.1 、cuDNN 7.6.5、PyTorch1.3 - BooTurbo - 博客园_files/saved_resource(1).html"></iframe></body></html>
